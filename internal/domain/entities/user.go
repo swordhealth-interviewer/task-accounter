@@ -5,34 +5,38 @@ import (
 	"net/mail"
 )
 
-type Type string
+type UserRole string
+type UserError string
 
 const (
-	Manager    Type = "manager"
-	Technician Type = "technician"
+	manager    UserRole = "manager"
+	technician UserRole = "technician"
+
+	invalidEmailError UserError = "invalid email address"
+	invalidRoleError  UserError = "invalid role"
 )
 
 type User struct {
 	ID    string
 	Name  string
 	Email string
-	Role  Type
+	Role  UserRole
 }
 
 func NewUser(name string, address string, role string) (User, error) {
 	email, err := validMailAddress(address)
 	if err != nil {
-		return User{}, errors.New("invalid email address")
+		return User{}, errors.New(string(invalidEmailError))
 	}
 
-	if role != "manager" && role != "technician" {
-		return User{}, errors.New("invalid role")
+	if role != string(manager) && role != string(technician) {
+		return User{}, errors.New(string(invalidRoleError))
 	}
 
 	user := User{
 		Name:  name,
 		Email: email,
-		Role:  Type(role),
+		Role:  UserRole(role),
 	}
 
 	return user, nil

@@ -11,7 +11,13 @@ import (
 type TaskCreateUseCaseError string
 
 const (
-	saveError TaskCreateUseCaseError = "usecase error saving task"
+	summaryMaxLength int = 2500
+
+	technicianRoleRequiredError TaskCreateUseCaseError = "only technicians can create tasks"
+	emptyTitleError             TaskCreateUseCaseError = "title is required"
+	emptySummaryError           TaskCreateUseCaseError = "summary is required"
+	summaryMaxLengthError       TaskCreateUseCaseError = "summary must have a maximum of 2500 characters"
+	saveError                   TaskCreateUseCaseError = "usecase error saving task"
 )
 
 type TaskCreateInput struct {
@@ -39,6 +45,22 @@ func NewTaskCreateUseCase(taskRepository adapters.TaskRepositoryInterface) TaskC
 }
 
 func (u TaskCreateUseCase) Execute(input TaskCreateInput) (TaskCreateOutput, error) {
+	if input.User.Role != entities.UserRoleTechnician {
+		return TaskCreateOutput{}, errors.New(string(technicianRoleRequiredError))
+	}
+
+	if input.Title == "" {
+		return TaskCreateOutput{}, errors.New(string(emptyTitleError))
+	}
+
+	if input.Summary == "" {
+		return TaskCreateOutput{}, errors.New(string(emptySummaryError))
+	}
+
+	if len(input.Summary) > summaryMaxLength {
+		return TaskCreateOutput{}, errors.New(string(summaryMaxLengthError))
+	}
+
 	task := entities.NewTask(input.Title, input.Summary, input.User.ID)
 
 	uuid := uuid.NewString()

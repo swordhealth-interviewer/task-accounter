@@ -9,8 +9,8 @@ type UserRole string
 type UserError string
 
 const (
-	manager    UserRole = "manager"
-	technician UserRole = "technician"
+	UserRoleManager    UserRole = "manager"
+	UserRoleTechnician UserRole = "technician"
 
 	invalidEmailError UserError = "invalid email address"
 	invalidRoleError  UserError = "invalid role"
@@ -29,7 +29,7 @@ func NewUser(name string, address string, role string) (User, error) {
 		return User{}, errors.New(string(invalidEmailError))
 	}
 
-	if role != string(manager) && role != string(technician) {
+	if role != string(UserRoleManager) && role != string(UserRoleTechnician) {
 		return User{}, errors.New(string(invalidRoleError))
 	}
 

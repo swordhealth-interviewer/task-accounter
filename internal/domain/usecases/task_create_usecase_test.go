@@ -1,6 +1,7 @@
 package usecases_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -31,7 +32,8 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 			Title:   "Task Title",
 			Summary: "Task Description",
 			User: entities.User{
-				ID: "user-id",
+				ID:   "user-id",
+				Role: entities.UserRoleTechnician,
 			},
 		}
 
@@ -54,13 +56,93 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 		assert.Equal(t, entities.Open, output.Task.Status)
 	})
 
+	t.Run("should return an error when user is not a technician", func(t *testing.T) {
+		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
+		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
+
+		task := usecases.TaskCreateInput{
+			User: entities.User{
+				Role: entities.UserRoleManager,
+			},
+		}
+
+		output, err := taskCreateUsecase.Execute(task)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, "only technicians can create tasks", err.Error())
+		assert.Equal(t, usecases.TaskCreateOutput{}, output)
+	})
+
+	t.Run("should return an error when title is empty", func(t *testing.T) {
+		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
+		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
+
+		task := usecases.TaskCreateInput{
+			User: entities.User{
+				Role: entities.UserRoleTechnician,
+			},
+		}
+
+		output, err := taskCreateUsecase.Execute(task)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, "title is required", err.Error())
+		assert.Equal(t, usecases.TaskCreateOutput{}, output)
+	})
+
+	t.Run("should return an error when summary is empty", func(t *testing.T) {
+		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
+		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
+
+		task := usecases.TaskCreateInput{
+			Title: "Task Title",
+			User: entities.User{
+				Role: entities.UserRoleTechnician,
+			},
+		}
+
+		output, err := taskCreateUsecase.Execute(task)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, "summary is required", err.Error())
+		assert.Equal(t, usecases.TaskCreateOutput{}, output)
+	})
+
+	t.Run("should return an error when summary is longer than 2500 characters", func(t *testing.T) {
+		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
+		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
+
+		task := usecases.TaskCreateInput{
+			Title:   "Task Title",
+			Summary: strings.Repeat("a", 2501),
+			User: entities.User{
+				Role: entities.UserRoleTechnician,
+			},
+		}
+
+		output, err := taskCreateUsecase.Execute(task)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, "summary must have a maximum of 2500 characters", err.Error())
+		assert.Equal(t, usecases.TaskCreateOutput{}, output)
+	})
+
 	t.Run("should return an error when task repository fails to save", func(t *testing.T) {
 		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
 		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
 
 		taskRepositoryMock.On("Save", mock.Anything).Return(entities.Task{}, assert.AnError)
 
-		output, err := taskCreateUsecase.Execute(usecases.TaskCreateInput{})
+		input := usecases.TaskCreateInput{
+			Title:   "Task Title",
+			Summary: "Task Description",
+			User: entities.User{
+				ID:   "user-id",
+				Role: entities.UserRoleTechnician,
+			},
+		}
+
+		output, err := taskCreateUsecase.Execute(input)
 
 		assert.NotNil(t, err)
 		assert.Equal(t, "usecase error saving task: assert.AnError general error for testing", err.Error())

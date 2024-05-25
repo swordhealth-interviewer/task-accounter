@@ -3,8 +3,6 @@ package entities
 import (
 	"errors"
 	"net/mail"
-
-	"github.com/google/uuid"
 )
 
 type Type string
@@ -31,10 +29,7 @@ func NewUser(name string, address string, role string) (User, error) {
 		return User{}, errors.New("invalid role")
 	}
 
-	uuid := uuid.NewString()
-
 	user := User{
-		ID:    uuid,
 		Name:  name,
 		Email: email,
 		Role:  Type(role),

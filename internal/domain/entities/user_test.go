@@ -14,7 +14,7 @@ func TestNewUser(t *testing.T) {
 		assert.NotNil(t, user.ID)
 		assert.Equal(t, "test user", user.Name)
 		assert.Equal(t, "testuser@testmail.com", user.Email)
-		assert.Equal(t, Manager, user.Role)
+		assert.Equal(t, UserRoleManager, user.Role)
 	})
 
 	t.Run("should create an user technician and return it with error nil", func(t *testing.T) {
@@ -24,7 +24,7 @@ func TestNewUser(t *testing.T) {
 		assert.NotNil(t, user.ID)
 		assert.Equal(t, "test user", user.Name)
 		assert.Equal(t, "testuser@testmail.com", user.Email)
-		assert.Equal(t, Technician, user.Role)
+		assert.Equal(t, UserRoleTechnician, user.Role)
 	})
 
 	t.Run("should return error for invalid email", func(t *testing.T) {

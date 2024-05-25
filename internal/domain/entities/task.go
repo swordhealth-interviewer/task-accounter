@@ -13,12 +13,12 @@ type Task struct {
 	ID      string
 	Title   string
 	Summary string
-	Owner   User
+	Owner   string
 	Status  TaskStatus
 	DoneAt  time.Time
 }
 
-func NewTask(title string, summary string, owner User) Task {
+func NewTask(title string, summary string, owner string) Task {
 	return Task{
 		Title:   title,
 		Summary: summary,

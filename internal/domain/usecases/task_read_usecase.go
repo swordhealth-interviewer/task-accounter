@@ -36,12 +36,12 @@ func (u TaskReadUseCase) Execute(input TaskReadInput) (TaskReadOutput, error) {
 	if input.User.Role == entities.UserRoleManager {
 		tasks, err = u.TaskRepository.FindAll()
 		if err != nil {
-			return TaskReadOutput{}, errors.New(string(readAllError) + ": " + err.Error())
+			return TaskReadOutput{}, errors.New(string(ErrorReadAllTasks) + ": " + err.Error())
 		}
 	} else {
 		tasks, err = u.TaskRepository.FindByUserID(input.User.ID)
 		if err != nil {
-			return TaskReadOutput{}, errors.New(string(readTasksByUserError) + ": " + err.Error())
+			return TaskReadOutput{}, errors.New(string(ErrorReadTasksByUser) + ": " + err.Error())
 		}
 	}
 

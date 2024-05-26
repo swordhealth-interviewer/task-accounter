@@ -79,7 +79,7 @@ func TestTaskReadUseCaseExecute(t *testing.T) {
 		})
 
 		assert.NotNil(t, err)
-		assert.Equal(t, "error reading all tasks: assert.AnError general error for testing", err.Error())
+		assert.Equal(t, string(usecases.ErrorReadAllTasks)+": assert.AnError general error for testing", err.Error())
 		assert.Equal(t, usecases.TaskReadOutput{}, output)
 	})
 
@@ -142,7 +142,7 @@ func TestTaskReadUseCaseExecute(t *testing.T) {
 		})
 
 		assert.NotNil(t, err)
-		assert.Equal(t, "error reading tasks by user: assert.AnError general error for testing", err.Error())
+		assert.Equal(t, string(usecases.ErrorReadTasksByUser)+": assert.AnError general error for testing", err.Error())
 		assert.Equal(t, usecases.TaskReadOutput{}, output)
 	})
 }

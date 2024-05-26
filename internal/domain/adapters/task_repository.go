@@ -7,4 +7,5 @@ type TaskRepositoryInterface interface {
 	FindByID(id string) (*entities.Task, error)
 	FindAll() ([]*entities.Task, error)
 	FindByUserID(userID string) ([]*entities.Task, error)
+	Delete(id string) error
 }

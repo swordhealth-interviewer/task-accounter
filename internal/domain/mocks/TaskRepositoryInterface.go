@@ -42,6 +42,36 @@ func (_m *TaskRepositoryInterface) FindAll() ([]*entities.Task, error) {
 	return r0, r1
 }
 
+// FindByID provides a mock function with given fields: id
+func (_m *TaskRepositoryInterface) FindByID(id string) (*entities.Task, error) {
+	ret := _m.Called(id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindByID")
+	}
+
+	var r0 *entities.Task
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) (*entities.Task, error)); ok {
+		return rf(id)
+	}
+	if rf, ok := ret.Get(0).(func(string) *entities.Task); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*entities.Task)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // FindByUserID provides a mock function with given fields: userID
 func (_m *TaskRepositoryInterface) FindByUserID(userID string) ([]*entities.Task, error) {
 	ret := _m.Called(userID)
@@ -73,22 +103,24 @@ func (_m *TaskRepositoryInterface) FindByUserID(userID string) ([]*entities.Task
 }
 
 // Save provides a mock function with given fields: task
-func (_m *TaskRepositoryInterface) Save(task entities.Task) (entities.Task, error) {
+func (_m *TaskRepositoryInterface) Save(task entities.Task) (*entities.Task, error) {
 	ret := _m.Called(task)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Save")
 	}
 
-	var r0 entities.Task
+	var r0 *entities.Task
 	var r1 error
-	if rf, ok := ret.Get(0).(func(entities.Task) (entities.Task, error)); ok {
+	if rf, ok := ret.Get(0).(func(entities.Task) (*entities.Task, error)); ok {
 		return rf(task)
 	}
-	if rf, ok := ret.Get(0).(func(entities.Task) entities.Task); ok {
+	if rf, ok := ret.Get(0).(func(entities.Task) *entities.Task); ok {
 		r0 = rf(task)
 	} else {
-		r0 = ret.Get(0).(entities.Task)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*entities.Task)
+		}
 	}
 
 	if rf, ok := ret.Get(1).(func(entities.Task) error); ok {

@@ -34,7 +34,7 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 			},
 		}
 
-		taskRepositoryMock.On("Save", mock.Anything).Return(entities.Task{
+		taskRepositoryMock.On("Save", mock.Anything).Return(&entities.Task{
 			ID:      "task-id",
 			Title:   "Task Title",
 			Summary: "Task Description",
@@ -74,7 +74,7 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
 		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
 
-		taskRepositoryMock.On("Save", mock.Anything).Return(entities.Task{}, assert.AnError)
+		taskRepositoryMock.On("Save", mock.Anything).Return(&entities.Task{}, assert.AnError)
 
 		input := usecases.TaskCreateInput{
 			Title:   "Task Title",

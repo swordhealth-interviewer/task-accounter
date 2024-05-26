@@ -15,7 +15,7 @@ type TaskCreateInput struct {
 }
 
 type TaskCreateOutput struct {
-	Task entities.Task
+	Task *entities.Task
 }
 
 type TaskCreateUseCaseInterface interface {

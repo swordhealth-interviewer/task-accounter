@@ -26,16 +26,9 @@ type Task struct {
 }
 
 func NewTask(title string, summary string, owner string) (Task, error) {
-	if title == "" {
-		return Task{}, errors.New(errorTitleRequired)
-	}
-
-	if summary == "" {
-		return Task{}, errors.New(errorSummaryRequired)
-	}
-
-	if len(summary) > summaryMaxLength {
-		return Task{}, errors.New(errorSummaryMaxLength)
+	err := ValidateTaskParameters(title, summary)
+	if err != nil {
+		return Task{}, err
 	}
 
 	task := Task{
@@ -46,4 +39,20 @@ func NewTask(title string, summary string, owner string) (Task, error) {
 	}
 
 	return task, nil
+}
+
+func ValidateTaskParameters(title string, summary string) error {
+	if title == "" {
+		return errors.New(errorTitleRequired)
+	}
+
+	if summary == "" {
+		return errors.New(errorSummaryRequired)
+	}
+
+	if len(summary) > summaryMaxLength {
+		return errors.New(errorSummaryMaxLength)
+	}
+
+	return nil
 }

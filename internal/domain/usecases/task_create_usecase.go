@@ -15,7 +15,7 @@ type TaskCreateInput struct {
 }
 
 type TaskCreateOutput struct {
-	Task entities.Task
+	Task *entities.Task
 }
 
 type TaskCreateUseCaseInterface interface {
@@ -34,29 +34,20 @@ func NewTaskCreateUseCase(taskRepository adapters.TaskRepositoryInterface) TaskC
 
 func (u TaskCreateUseCase) Execute(input TaskCreateInput) (TaskCreateOutput, error) {
 	if input.User.Role != entities.UserRoleTechnician {
-		return TaskCreateOutput{}, errors.New(string(technicianRoleRequiredError))
+		return TaskCreateOutput{}, errors.New(string(ErrorTechnicianRoleRequired))
 	}
 
-	if input.Title == "" {
-		return TaskCreateOutput{}, errors.New(string(emptyTitleError))
+	task, err := entities.NewTask(input.Title, input.Summary, input.User.ID)
+	if err != nil {
+		return TaskCreateOutput{}, errors.New(string(ErrorCreateTask) + ": " + err.Error())
 	}
-
-	if input.Summary == "" {
-		return TaskCreateOutput{}, errors.New(string(emptySummaryError))
-	}
-
-	if len(input.Summary) > summaryMaxLength {
-		return TaskCreateOutput{}, errors.New(string(summaryMaxLengthError))
-	}
-
-	task := entities.NewTask(input.Title, input.Summary, input.User.ID)
 
 	uuid := uuid.NewString()
 	task.ID = uuid
 
 	createdTask, err := u.TaskRepository.Save(task)
 	if err != nil {
-		return TaskCreateOutput{}, errors.New(string(saveError) + ": " + err.Error())
+		return TaskCreateOutput{}, errors.New(string(ErrorSaveTask) + ": " + err.Error())
 	}
 
 	output := TaskCreateOutput{

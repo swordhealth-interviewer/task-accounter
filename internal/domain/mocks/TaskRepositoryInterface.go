@@ -12,6 +12,66 @@ type TaskRepositoryInterface struct {
 	mock.Mock
 }
 
+// FindAll provides a mock function with given fields:
+func (_m *TaskRepositoryInterface) FindAll() ([]*entities.Task, error) {
+	ret := _m.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindAll")
+	}
+
+	var r0 []*entities.Task
+	var r1 error
+	if rf, ok := ret.Get(0).(func() ([]*entities.Task, error)); ok {
+		return rf()
+	}
+	if rf, ok := ret.Get(0).(func() []*entities.Task); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*entities.Task)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// FindByUserID provides a mock function with given fields: userID
+func (_m *TaskRepositoryInterface) FindByUserID(userID string) ([]*entities.Task, error) {
+	ret := _m.Called(userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindByUserID")
+	}
+
+	var r0 []*entities.Task
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) ([]*entities.Task, error)); ok {
+		return rf(userID)
+	}
+	if rf, ok := ret.Get(0).(func(string) []*entities.Task); ok {
+		r0 = rf(userID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*entities.Task)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(userID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Save provides a mock function with given fields: task
 func (_m *TaskRepositoryInterface) Save(task entities.Task) (entities.Task, error) {
 	ret := _m.Called(task)

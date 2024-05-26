@@ -12,9 +12,8 @@ import (
 )
 
 func TestNewTaskCreateUseCase(t *testing.T) {
-	taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
-
 	t.Run("should return a task create use case", func(t *testing.T) {
+		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
 		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
 
 		assert.NotNil(t, taskCreateUsecase)
@@ -23,7 +22,6 @@ func TestNewTaskCreateUseCase(t *testing.T) {
 }
 
 func TestTaskCreateUseCaseExecute(t *testing.T) {
-
 	t.Run("should create a task and return it with error nil", func(t *testing.T) {
 		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
 		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
@@ -145,7 +143,7 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 		output, err := taskCreateUsecase.Execute(input)
 
 		assert.NotNil(t, err)
-		assert.Equal(t, "usecase error saving task: assert.AnError general error for testing", err.Error())
+		assert.Equal(t, "error saving task: assert.AnError general error for testing", err.Error())
 		assert.Equal(t, usecases.TaskCreateOutput{}, output)
 	})
 }

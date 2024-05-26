@@ -59,5 +59,9 @@ func (u TaskCreateUseCase) Execute(input TaskCreateInput) (TaskCreateOutput, err
 		return TaskCreateOutput{}, errors.New(string(saveError) + ": " + err.Error())
 	}
 
-	return TaskCreateOutput{Task: createdTask}, nil
+	output := TaskCreateOutput{
+		Task: createdTask,
+	}
+
+	return output, nil
 }

@@ -24,11 +24,15 @@ type AppHandlers struct {
 	pingHandler        *handlers.PingHandler
 	taskCreateHandler  *handlers.TaskCreateHandler
 	taskReadAllHandler *handlers.TaskReadAllHandler
+	taskUpdateHandler  *handlers.TaskUpdateHandler
+	taskDeleteHandler  *handlers.TaskDeleteHandler
 }
 
 type AppUseCases struct {
 	taskCreateUseCase  usecases.TaskCreateUseCaseInterface
 	taskReadAllUseCase usecases.TaskReadAllUseCaseInterface
+	taskUpdateUseCase  usecases.TaskUpdateUseCaseInterface
+	taskDeleteUseCase  usecases.TaskDeleteUseCaseInterface
 }
 
 type AppRepositories struct {

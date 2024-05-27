@@ -38,7 +38,7 @@ func TestTaskUpdateHandle(t *testing.T) {
 		validBodyJSON, _ := json.Marshal(validBody)
 
 		e := echo.New()
-		req := httptest.NewRequest(http.MethodPost, "/v2/task:01", strings.NewReader(string(validBodyJSON)))
+		req := httptest.NewRequest(http.MethodPost, "/v2/task/01", strings.NewReader(string(validBodyJSON)))
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(req, rec)
@@ -65,7 +65,7 @@ func TestTaskUpdateHandle(t *testing.T) {
 		invalidBodyJSON := []byte(invalidBody)
 
 		e := echo.New()
-		req := httptest.NewRequest(http.MethodPost, "/v2/task:01", strings.NewReader(string(invalidBodyJSON)))
+		req := httptest.NewRequest(http.MethodPost, "/v2/task/01", strings.NewReader(string(invalidBodyJSON)))
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(req, rec)
@@ -96,7 +96,7 @@ func TestTaskUpdateHandle(t *testing.T) {
 		validBodyJSON, _ := json.Marshal(validBody)
 
 		e := echo.New()
-		req := httptest.NewRequest(http.MethodPost, "/v2/task:01", strings.NewReader(string(validBodyJSON)))
+		req := httptest.NewRequest(http.MethodPost, "/v2/task/01", strings.NewReader(string(validBodyJSON)))
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(req, rec)

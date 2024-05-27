@@ -52,3 +52,10 @@ func TaskUpdateRequestToTaskUpdateInput(t dto.TaskUpdateRequest, user entities.U
 		User:      user,
 	}
 }
+
+func TaskIDRequestToTaskDeleteInput(t dto.TaskIDRequest, user entities.User) usecases.TaskDeleteInput {
+	return usecases.TaskDeleteInput{
+		TaskID: t.ID,
+		User:   user,
+	}
+}

@@ -11,6 +11,10 @@ type TaskCreateResponse struct {
 	ID string `json:"id"`
 }
 
+type TaskIDRequest struct {
+	ID string `param:"id"`
+}
+
 type TaskReadResponse struct {
 	ID      string    `json:"id"`
 	Title   string    `json:"title"`
@@ -25,7 +29,7 @@ type TaskReadAllResponse struct {
 }
 
 type TaskUpdateRequest struct {
-	ID        string `json:"id"`
+	ID        string `param:"id"`
 	Title     string `json:"title"`
 	Summary   string `json:"summary"`
 	CloseTask bool   `json:"close_task"`

@@ -37,4 +37,12 @@ func (s *RestServer) TaskRoutes(task *echo.Group) {
 	task.GET("/", func(c echo.Context) error {
 		return s.appHandler.taskReadAllHandler.Handle(c)
 	})
+
+	task.PUT("/:id", func(c echo.Context) error {
+		return s.appHandler.taskUpdateHandler.Handle(c)
+	})
+
+	task.DELETE("/:id", func(c echo.Context) error {
+		return s.appHandler.taskDeleteHandler.Handle(c)
+	})
 }

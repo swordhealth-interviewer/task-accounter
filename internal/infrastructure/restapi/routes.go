@@ -12,7 +12,9 @@ func (s *RestServer) SetUpRoutes(config echojwt.Config) {
 	v2 := s.router.Group("/v2")
 	v2.Use(echojwt.WithConfig(config))
 	s.PingRoute(v2)
-	s.TaskRoutes(v2)
+
+	task := v2.Group("/task")
+	s.TaskRoutes(task)
 }
 
 func (s *RestServer) LoginRoute(v1 *echo.Group) {
@@ -27,8 +29,12 @@ func (s *RestServer) PingRoute(v2 *echo.Group) {
 	})
 }
 
-func (s *RestServer) TaskRoutes(v2 *echo.Group) {
-	v2.POST("/task", func(c echo.Context) error {
+func (s *RestServer) TaskRoutes(task *echo.Group) {
+	task.POST("/", func(c echo.Context) error {
 		return s.appHandler.taskCreateHandler.Handle(c)
+	})
+
+	task.GET("/", func(c echo.Context) error {
+		return s.appHandler.taskReadAllHandler.Handle(c)
 	})
 }

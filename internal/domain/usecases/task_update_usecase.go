@@ -45,7 +45,7 @@ func (u TaskUpdateUseCase) Execute(input TaskUpdateInput) (TaskUpdateOutput, err
 		return TaskUpdateOutput{}, errors.New(string(ErrorFindTaskByID) + ": " + err.Error())
 	}
 
-	if task.Owner != input.User.ID {
+	if task.OwnerID != input.User.ID {
 		return TaskUpdateOutput{}, errors.New(string(ErrorTaskNotOwnedByUser))
 	}
 

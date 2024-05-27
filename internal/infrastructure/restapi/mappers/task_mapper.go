@@ -19,3 +19,26 @@ func TaskCreateOutputToTaskCreateResponse(t usecases.TaskCreateOutput) dto.TaskC
 		ID: t.Task.ID,
 	}
 }
+
+func TaskReadAllRequestToTaskReadAllInput(user entities.User) usecases.TaskReadAllInput {
+	return usecases.TaskReadAllInput{
+		User: user,
+	}
+}
+
+func TaskReadAllOutputToTaskReadResponse(t usecases.TaskReadAllOutput) dto.TaskReadAllResponse {
+	var tasks []dto.TaskReadResponse
+	for _, task := range t.Tasks {
+		tasks = append(tasks, dto.TaskReadResponse{
+			ID:      task.ID,
+			Title:   task.Title,
+			Summary: task.Summary,
+			OwerID:  task.OwnerID,
+			Status:  string(task.Status),
+			DoneAt:  task.DoneAt,
+		})
+	}
+	return dto.TaskReadAllResponse{
+		Tasks: tasks,
+	}
+}

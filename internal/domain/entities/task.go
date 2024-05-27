@@ -20,7 +20,7 @@ type Task struct {
 	ID      string
 	Title   string
 	Summary string
-	Owner   string
+	OwnerID string
 	Status  TaskStatus
 	DoneAt  time.Time
 }
@@ -34,7 +34,7 @@ func NewTask(title string, summary string, owner string) (Task, error) {
 	task := Task{
 		Title:   title,
 		Summary: summary,
-		Owner:   owner,
+		OwnerID: owner,
 		Status:  Open,
 	}
 

@@ -20,13 +20,15 @@ type RestServer struct {
 }
 
 type AppHandlers struct {
-	loginHandler      *handlers.LoginHandler
-	pingHandler       *handlers.PingHandler
-	taskCreateHandler *handlers.TaskCreateHandler
+	loginHandler       *handlers.LoginHandler
+	pingHandler        *handlers.PingHandler
+	taskCreateHandler  *handlers.TaskCreateHandler
+	taskReadAllHandler *handlers.TaskReadAllHandler
 }
 
 type AppUseCases struct {
-	taskCreateUseCase usecases.TaskCreateUseCaseInterface
+	taskCreateUseCase  usecases.TaskCreateUseCaseInterface
+	taskReadAllUseCase usecases.TaskReadAllUseCaseInterface
 }
 
 type AppRepositories struct {

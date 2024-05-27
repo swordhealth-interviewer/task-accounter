@@ -19,7 +19,7 @@ import (
 )
 
 func TestNewTaskCreateHandler(t *testing.T) {
-	t.Run("should return new product create handler", func(t *testing.T) {
+	t.Run("should return new task create handler", func(t *testing.T) {
 		useCaseMock := mocks.NewTaskCreateUseCaseInterface(t)
 
 		h := NewTaskCreateHandler(useCaseMock)

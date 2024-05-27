@@ -20,5 +20,9 @@ func (h *PingHandler) Handle(c echo.Context) error {
 	claims := user.Claims.(*auth.JwtCustomClaims)
 	id := claims.ID
 
-	return c.JSON(http.StatusOK, "pong - user id: "+id)
+	res := map[string]string{
+		"message": "pong - user id: " + id,
+	}
+
+	return c.JSON(http.StatusOK, res)
 }

@@ -1,7 +1,13 @@
 package restapi
 
 import (
+	"os"
+
+	"github.com/golang-jwt/jwt/v5"
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/auth"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/handlers"
 )
 
@@ -11,7 +17,8 @@ type RestServer struct {
 }
 
 type AppHandlers struct {
-	pingHandler *handlers.PingHandler
+	loginHandler *handlers.LoginHandler
+	pingHandler  *handlers.PingHandler
 }
 
 func NewRestService(router *echo.Echo, appHandler *AppHandlers) *RestServer {
@@ -23,10 +30,20 @@ func NewRestService(router *echo.Echo, appHandler *AppHandlers) *RestServer {
 
 func StartServer() {
 	router := echo.New()
+	router.Use(middleware.Logger())
+	router.Use(middleware.Recover())
+
+	config := echojwt.Config{
+		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+			return new(auth.JwtCustomClaims)
+		},
+		SigningKey: []byte(os.Getenv("JWT_SECRET")),
+	}
+
 	handlers := configHandlers()
 
 	server := NewRestService(router, handlers)
-	server.SetUpRoutes()
+	server.SetUpRoutes(config)
 
-	server.router.Logger.Fatal(router.Start(":8080"))
+	server.router.Start(":8080")
 }

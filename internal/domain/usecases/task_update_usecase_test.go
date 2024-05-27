@@ -40,7 +40,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			ID:      "task-id",
 			Title:   "Task Title",
 			Summary: "Task Description",
-			Owner:   "user-id",
+			OwnerID: "user-id",
 			Status:  entities.Open,
 		}, nil)
 
@@ -48,7 +48,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			ID:      "task-id",
 			Title:   "Task Title 2",
 			Summary: "Task Description 2",
-			Owner:   "user-id",
+			OwnerID: "user-id",
 			Status:  entities.Open,
 		}, nil)
 
@@ -59,7 +59,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 		assert.Equal(t, task.TaskID, output.Task.ID)
 		assert.Equal(t, task.Title, output.Task.Title)
 		assert.Equal(t, task.Summary, output.Task.Summary)
-		assert.Equal(t, task.User.ID, output.Task.Owner)
+		assert.Equal(t, task.User.ID, output.Task.OwnerID)
 		assert.Equal(t, entities.Open, output.Task.Status)
 	})
 
@@ -82,7 +82,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			ID:      "task-id",
 			Title:   "Task Title",
 			Summary: "Task Description",
-			Owner:   "user-id",
+			OwnerID: "user-id",
 			Status:  entities.Open,
 		}, nil)
 
@@ -90,7 +90,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			ID:      "task-id",
 			Title:   "Task Title 2",
 			Summary: "Task Description 2",
-			Owner:   "user-id",
+			OwnerID: "user-id",
 			Status:  entities.Closed,
 		}, nil)
 
@@ -101,7 +101,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 		assert.Equal(t, task.TaskID, output.Task.ID)
 		assert.Equal(t, task.Title, output.Task.Title)
 		assert.Equal(t, task.Summary, output.Task.Summary)
-		assert.Equal(t, task.User.ID, output.Task.Owner)
+		assert.Equal(t, task.User.ID, output.Task.OwnerID)
 		assert.Equal(t, entities.Closed, output.Task.Status)
 	})
 
@@ -159,7 +159,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			ID:      "task-id",
 			Title:   "Task Title",
 			Summary: "Task Description",
-			Owner:   "another-user-id",
+			OwnerID: "another-user-id",
 			Status:  entities.Open,
 		}, nil)
 
@@ -186,7 +186,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			ID:      "task-id",
 			Title:   "Task Title",
 			Summary: "Task Description",
-			Owner:   "user-id",
+			OwnerID: "user-id",
 			Status:  entities.Closed,
 		}, nil)
 
@@ -214,7 +214,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			ID:      "task-id",
 			Title:   "Task Title",
 			Summary: "Task Description",
-			Owner:   "user-id",
+			OwnerID: "user-id",
 			Status:  entities.Open,
 		}, nil)
 
@@ -243,7 +243,7 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			ID:      "task-id",
 			Title:   "Task Title",
 			Summary: "Task Description",
-			Owner:   "user-id",
+			OwnerID: "user-id",
 			Status:  entities.Open,
 		}, nil)
 

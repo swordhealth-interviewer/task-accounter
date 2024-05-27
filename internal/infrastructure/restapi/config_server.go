@@ -10,19 +10,23 @@ func configHandlers(usecases *AppUseCases) *AppHandlers {
 	loginHandler := handlers.NewLoginHandler()
 	pingHandler := handlers.NewPingHandler()
 	taskCreateHandler := handlers.NewTaskCreateHandler(usecases.taskCreateUseCase)
+	taskReadAllHandler := handlers.NewTaskReadAllHandler(usecases.taskReadAllUseCase)
 
 	return &AppHandlers{
-		loginHandler:      loginHandler,
-		pingHandler:       pingHandler,
-		taskCreateHandler: taskCreateHandler,
+		loginHandler:       loginHandler,
+		pingHandler:        pingHandler,
+		taskCreateHandler:  taskCreateHandler,
+		taskReadAllHandler: taskReadAllHandler,
 	}
 }
 
 func configUseCases(repositories *AppRepositories) *AppUseCases {
 	taskCreateUseCase := usecases.NewTaskCreateUseCase(repositories.taskRepository)
+	taskReadAllUsecase := usecases.NewTaskReadAllUseCase(repositories.taskRepository)
 
 	return &AppUseCases{
-		taskCreateUseCase: taskCreateUseCase,
+		taskCreateUseCase:  taskCreateUseCase,
+		taskReadAllUseCase: taskReadAllUsecase,
 	}
 }
 

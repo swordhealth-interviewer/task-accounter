@@ -15,7 +15,7 @@ func TestNewTask(t *testing.T) {
 		assert.NotNil(t, task.ID)
 		assert.Equal(t, "test task", task.Title)
 		assert.Equal(t, "test task summary", task.Summary)
-		assert.Equal(t, "test owner", task.Owner)
+		assert.Equal(t, "test owner", task.OwnerID)
 		assert.Equal(t, Open, task.Status)
 	})
 

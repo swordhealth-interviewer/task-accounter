@@ -1,5 +1,7 @@
 package dto
 
+import "time"
+
 type TaskCreateRequest struct {
 	Title   string `json:"title"`
 	Summary string `json:"summary"`
@@ -7,4 +9,17 @@ type TaskCreateRequest struct {
 
 type TaskCreateResponse struct {
 	ID string `json:"id"`
+}
+
+type TaskReadResponse struct {
+	ID      string    `json:"id"`
+	Title   string    `json:"title"`
+	Summary string    `json:"summary"`
+	OwerID  string    `json:"owner_id"`
+	Status  string    `json:"status"`
+	DoneAt  time.Time `json:"done_at"`
+}
+
+type TaskReadAllResponse struct {
+	Tasks []TaskReadResponse `json:"tasks"`
 }

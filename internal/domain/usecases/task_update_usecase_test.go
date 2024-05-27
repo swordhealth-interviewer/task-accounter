@@ -52,15 +52,9 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			Status:  entities.Open,
 		}, nil)
 
-		output, err := taskUpdateUsecase.Execute(task)
+		err := taskUpdateUsecase.Execute(task)
 
 		assert.Nil(t, err)
-		assert.NotNil(t, output)
-		assert.Equal(t, task.TaskID, output.Task.ID)
-		assert.Equal(t, task.Title, output.Task.Title)
-		assert.Equal(t, task.Summary, output.Task.Summary)
-		assert.Equal(t, task.User.ID, output.Task.OwnerID)
-		assert.Equal(t, entities.Open, output.Task.Status)
 	})
 
 	t.Run("should close a task and return it with error nil", func(t *testing.T) {
@@ -94,15 +88,9 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			Status:  entities.Closed,
 		}, nil)
 
-		output, err := taskUpdateUsecase.Execute(task)
+		err := taskUpdateUsecase.Execute(task)
 
 		assert.Nil(t, err)
-		assert.NotNil(t, output)
-		assert.Equal(t, task.TaskID, output.Task.ID)
-		assert.Equal(t, task.Title, output.Task.Title)
-		assert.Equal(t, task.Summary, output.Task.Summary)
-		assert.Equal(t, task.User.ID, output.Task.OwnerID)
-		assert.Equal(t, entities.Closed, output.Task.Status)
 	})
 
 	t.Run("should return an error when user is not a technician", func(t *testing.T) {
@@ -115,11 +103,10 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			},
 		}
 
-		output, err := taskUpdateUsecase.Execute(task)
+		err := taskUpdateUsecase.Execute(task)
 
 		assert.NotNil(t, err)
 		assert.Equal(t, string(usecases.ErrorTechnicianRoleRequired), err.Error())
-		assert.Equal(t, usecases.TaskUpdateOutput{}, output)
 	})
 
 	t.Run("should return an error when task is not found", func(t *testing.T) {
@@ -136,11 +123,10 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 
 		taskRepositoryMock.On("FindByID", task.TaskID).Return(nil, assert.AnError)
 
-		output, err := taskUpdateUsecase.Execute(task)
+		err := taskUpdateUsecase.Execute(task)
 
 		assert.NotNil(t, err)
 		assert.Equal(t, string(usecases.ErrorFindTaskByID)+": assert.AnError general error for testing", err.Error())
-		assert.Equal(t, usecases.TaskUpdateOutput{}, output)
 	})
 
 	t.Run("should return an error when task is not owned by user", func(t *testing.T) {
@@ -163,11 +149,10 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			Status:  entities.Open,
 		}, nil)
 
-		output, err := taskUpdateUsecase.Execute(task)
+		err := taskUpdateUsecase.Execute(task)
 
 		assert.NotNil(t, err)
 		assert.Equal(t, string(usecases.ErrorTaskNotOwnedByUser), err.Error())
-		assert.Equal(t, usecases.TaskUpdateOutput{}, output)
 	})
 
 	t.Run("should return an error when task is closed", func(t *testing.T) {
@@ -190,11 +175,10 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			Status:  entities.Closed,
 		}, nil)
 
-		output, err := taskUpdateUsecase.Execute(task)
+		err := taskUpdateUsecase.Execute(task)
 
 		assert.NotNil(t, err)
 		assert.Equal(t, string(usecases.ErrorTaskClosed), err.Error())
-		assert.Equal(t, usecases.TaskUpdateOutput{}, output)
 	})
 
 	t.Run("should return an error when task data is invalid", func(t *testing.T) {
@@ -218,11 +202,10 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 			Status:  entities.Open,
 		}, nil)
 
-		output, err := taskUpdateUsecase.Execute(task)
+		err := taskUpdateUsecase.Execute(task)
 
 		assert.NotNil(t, err)
 		assert.Equal(t, string(usecases.ErrorInvalidTaskData)+": summary is required", err.Error())
-		assert.Equal(t, usecases.TaskUpdateOutput{}, output)
 	})
 
 	t.Run("should return an error when task repository save fails", func(t *testing.T) {
@@ -249,10 +232,9 @@ func TestTaskUpdateUseCaseExecute(t *testing.T) {
 
 		taskRepositoryMock.On("Save", mock.Anything).Return(nil, assert.AnError)
 
-		output, err := taskUpdateUsecase.Execute(task)
+		err := taskUpdateUsecase.Execute(task)
 
 		assert.NotNil(t, err)
 		assert.Equal(t, string(usecases.ErrorSaveTask)+": assert.AnError general error for testing", err.Error())
-		assert.Equal(t, usecases.TaskUpdateOutput{}, output)
 	})
 }

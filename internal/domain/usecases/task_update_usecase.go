@@ -17,12 +17,8 @@ type TaskUpdateInput struct {
 	User      entities.User
 }
 
-type TaskUpdateOutput struct {
-	Task entities.Task
-}
-
 type TaskUpdateUseCaseInterface interface {
-	Execute(input TaskUpdateInput) (TaskUpdateOutput, error)
+	Execute(input TaskUpdateInput) error
 }
 
 type TaskUpdateUseCase struct {
@@ -35,27 +31,27 @@ func NewTaskUpdateUseCase(taskRepository adapters.TaskRepositoryInterface) TaskU
 	}
 }
 
-func (u TaskUpdateUseCase) Execute(input TaskUpdateInput) (TaskUpdateOutput, error) {
+func (u TaskUpdateUseCase) Execute(input TaskUpdateInput) error {
 	if input.User.Role != entities.UserRoleTechnician {
-		return TaskUpdateOutput{}, errors.New(string(ErrorTechnicianRoleRequired))
+		return errors.New(string(ErrorTechnicianRoleRequired))
 	}
 
 	task, err := u.TaskRepository.FindByID(input.TaskID)
 	if err != nil {
-		return TaskUpdateOutput{}, errors.New(string(ErrorFindTaskByID) + ": " + err.Error())
+		return errors.New(string(ErrorFindTaskByID) + ": " + err.Error())
 	}
 
 	if task.OwnerID != input.User.ID {
-		return TaskUpdateOutput{}, errors.New(string(ErrorTaskNotOwnedByUser))
+		return errors.New(string(ErrorTaskNotOwnedByUser))
 	}
 
 	if task.Status == entities.Closed {
-		return TaskUpdateOutput{}, errors.New(string(ErrorTaskClosed))
+		return errors.New(string(ErrorTaskClosed))
 	}
 
 	err = entities.ValidateTaskParameters(input.Title, input.Summary)
 	if err != nil {
-		return TaskUpdateOutput{}, errors.New(string(ErrorInvalidTaskData) + ": " + err.Error())
+		return errors.New(string(ErrorInvalidTaskData) + ": " + err.Error())
 	}
 
 	task.Title = input.Title
@@ -66,9 +62,9 @@ func (u TaskUpdateUseCase) Execute(input TaskUpdateInput) (TaskUpdateOutput, err
 		task.DoneAt = time.Now()
 	}
 
-	updatedTask, err := u.TaskRepository.Save(*task)
+	_, err = u.TaskRepository.Save(*task)
 	if err != nil {
-		return TaskUpdateOutput{}, errors.New(string(ErrorSaveTask) + ": " + err.Error())
+		return errors.New(string(ErrorSaveTask) + ": " + err.Error())
 	}
 
 	if input.CloseTask {
@@ -78,9 +74,5 @@ func (u TaskUpdateUseCase) Execute(input TaskUpdateInput) (TaskUpdateOutput, err
 		fmt.Println("The tech " + userPrint + " performed the task" + taskPrint + " on date " + task.DoneAt.String())
 	}
 
-	output := TaskUpdateOutput{
-		Task: *updatedTask,
-	}
-
-	return output, nil
+	return nil
 }

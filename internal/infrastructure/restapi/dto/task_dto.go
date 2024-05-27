@@ -23,3 +23,10 @@ type TaskReadResponse struct {
 type TaskReadAllResponse struct {
 	Tasks []TaskReadResponse `json:"tasks"`
 }
+
+type TaskUpdateRequest struct {
+	ID        string `json:"id"`
+	Title     string `json:"title"`
+	Summary   string `json:"summary"`
+	CloseTask bool   `json:"close_task"`
+}

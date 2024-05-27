@@ -23,6 +23,7 @@ type AppHandlers struct {
 	loginHandler       *handlers.LoginHandler
 	pingHandler        *handlers.PingHandler
 	taskCreateHandler  *handlers.TaskCreateHandler
+	taskReadHandler    *handlers.TaskReadHandler
 	taskReadAllHandler *handlers.TaskReadAllHandler
 	taskUpdateHandler  *handlers.TaskUpdateHandler
 	taskDeleteHandler  *handlers.TaskDeleteHandler
@@ -30,6 +31,7 @@ type AppHandlers struct {
 
 type AppUseCases struct {
 	taskCreateUseCase  usecases.TaskCreateUseCaseInterface
+	taskReadUseCase    usecases.TaskReadUseCaseInterface
 	taskReadAllUseCase usecases.TaskReadAllUseCaseInterface
 	taskUpdateUseCase  usecases.TaskUpdateUseCaseInterface
 	taskDeleteUseCase  usecases.TaskDeleteUseCaseInterface

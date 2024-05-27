@@ -34,6 +34,10 @@ func (s *RestServer) TaskRoutes(task *echo.Group) {
 		return s.appHandler.taskCreateHandler.Handle(c)
 	})
 
+	task.GET("/:id", func(c echo.Context) error {
+		return s.appHandler.taskReadHandler.Handle(c)
+	})
+
 	task.GET("/", func(c echo.Context) error {
 		return s.appHandler.taskReadAllHandler.Handle(c)
 	})

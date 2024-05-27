@@ -7,6 +7,9 @@ import (
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+
+	"github.com/uiansol/task-accounter.git/internal/domain/adapters"
+	"github.com/uiansol/task-accounter.git/internal/domain/usecases"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/auth"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/handlers"
 )
@@ -17,8 +20,17 @@ type RestServer struct {
 }
 
 type AppHandlers struct {
-	loginHandler *handlers.LoginHandler
-	pingHandler  *handlers.PingHandler
+	loginHandler      *handlers.LoginHandler
+	pingHandler       *handlers.PingHandler
+	taskCreateHandler *handlers.TaskCreateHandler
+}
+
+type AppUseCases struct {
+	taskCreateUseCase usecases.TaskCreateUseCaseInterface
+}
+
+type AppRepositories struct {
+	taskRepository adapters.TaskRepositoryInterface
 }
 
 func NewRestService(router *echo.Echo, appHandler *AppHandlers) *RestServer {
@@ -40,7 +52,9 @@ func StartServer() {
 		SigningKey: []byte(os.Getenv("JWT_SECRET")),
 	}
 
-	handlers := configHandlers()
+	repositories := configRepositories()
+	usecases := configUseCases(repositories)
+	handlers := configHandlers(usecases)
 
 	server := NewRestService(router, handlers)
 	server.SetUpRoutes(config)

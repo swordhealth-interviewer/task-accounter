@@ -1,11 +1,14 @@
 package dbmysql
 
-import "github.com/uiansol/task-accounter.git/internal/domain/entities"
+import (
+	"github.com/uiansol/task-accounter.git/internal/domain/entities"
+	"gorm.io/gorm"
+)
 
 type TaskRepository struct {
 }
 
-func NewTaskRepository() *TaskRepository {
+func NewTaskRepository(db *gorm.DB) *TaskRepository {
 	return &TaskRepository{}
 }
 

@@ -8,40 +8,46 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 
+	"github.com/uiansol/task-accounter.git/internal/domain/usecases"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/auth"
+	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/dto"
+	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/mappers"
 )
 
 type LoginHandler struct {
+	loginUseCase usecases.LoginUseCaseInterface
 }
 
-func NewLoginHandler() *LoginHandler {
-	return &LoginHandler{}
+func NewLoginHandler(loginUseCase usecases.LoginUseCaseInterface) *LoginHandler {
+	return &LoginHandler{
+		loginUseCase: loginUseCase,
+	}
+
 }
 
 func (h *LoginHandler) Handle(c echo.Context) error {
-	username := c.FormValue("username")
-	password := c.FormValue("password")
-
-	// Throws unauthorized error
-	if username != "uian" || password != "123" {
-		return echo.ErrUnauthorized
+	var authInput dto.AuthInput
+	if err := c.Bind(&authInput); err != nil {
+		return c.String(http.StatusBadRequest, badRequestMessage+err.Error())
 	}
 
-	// Set custom claims
+	input := mappers.MapAuthInputToLoginUseCase(authInput)
+	output, err := h.loginUseCase.Execute(input)
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+
 	claims := &auth.JwtCustomClaims{
-		"01",
-		"Uian",
-		"test@test.com",
-		"technician",
+		output.User.ID,
+		output.User.Name,
+		output.User.Email,
+		string(output.User.Role),
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},
 	}
 
-	// Create token with claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		return err

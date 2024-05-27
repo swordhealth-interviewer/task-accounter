@@ -22,7 +22,6 @@ func NewLoginHandler(loginUseCase usecases.LoginUseCaseInterface) *LoginHandler 
 	return &LoginHandler{
 		loginUseCase: loginUseCase,
 	}
-
 }
 
 func (h *LoginHandler) Handle(c echo.Context) error {

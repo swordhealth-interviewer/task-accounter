@@ -42,3 +42,13 @@ func TaskReadAllOutputToTaskReadResponse(t usecases.TaskReadAllOutput) dto.TaskR
 		Tasks: tasks,
 	}
 }
+
+func TaskUpdateRequestToTaskUpdateInput(t dto.TaskUpdateRequest, user entities.User) usecases.TaskUpdateInput {
+	return usecases.TaskUpdateInput{
+		TaskID:    t.ID,
+		Title:     t.Title,
+		Summary:   t.Summary,
+		CloseTask: t.CloseTask,
+		User:      user,
+	}
+}

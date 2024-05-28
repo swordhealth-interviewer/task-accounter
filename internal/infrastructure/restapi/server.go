@@ -1,16 +1,11 @@
 package restapi
 
 import (
-	"os"
-
-	"github.com/golang-jwt/jwt/v5"
-	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/uiansol/task-accounter.git/internal/domain/adapters"
 	"github.com/uiansol/task-accounter.git/internal/domain/usecases"
-	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/auth"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/handlers"
 )
 
@@ -30,6 +25,7 @@ type AppHandlers struct {
 }
 
 type AppUseCases struct {
+	loginUseCase       usecases.LoginUseCaseInterface
 	taskCreateUseCase  usecases.TaskCreateUseCaseInterface
 	taskReadUseCase    usecases.TaskReadUseCaseInterface
 	taskReadAllUseCase usecases.TaskReadAllUseCaseInterface
@@ -38,6 +34,7 @@ type AppUseCases struct {
 }
 
 type AppRepositories struct {
+	userRepository adapters.UserRepositoryInterface
 	taskRepository adapters.TaskRepositoryInterface
 }
 
@@ -49,23 +46,20 @@ func NewRestService(router *echo.Echo, appHandler *AppHandlers) *RestServer {
 }
 
 func StartServer() {
+	LoadEnvs()
+	jwtConfig := configJwt()
+	db := ConnectToMysql()
+
 	router := echo.New()
 	router.Use(middleware.Logger())
 	router.Use(middleware.Recover())
 
-	config := echojwt.Config{
-		NewClaimsFunc: func(c echo.Context) jwt.Claims {
-			return new(auth.JwtCustomClaims)
-		},
-		SigningKey: []byte(os.Getenv("JWT_SECRET")),
-	}
-
-	repositories := configRepositories()
+	repositories := configRepositories(db)
 	usecases := configUseCases(repositories)
 	handlers := configHandlers(usecases)
 
 	server := NewRestService(router, handlers)
-	server.SetUpRoutes(config)
+	server.SetUpRoutes(jwtConfig)
 
 	server.router.Start(":8080")
 }

@@ -5,12 +5,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *RestServer) SetUpRoutes(config echojwt.Config) {
+func (s *RestServer) SetUpRoutes(jwtConfig echojwt.Config) {
 	v1 := s.router.Group("/v1")
 	s.LoginRoute(v1)
 
 	v2 := s.router.Group("/v2")
-	v2.Use(echojwt.WithConfig(config))
+	v2.Use(echojwt.WithConfig(jwtConfig))
 	s.PingRoute(v2)
 
 	task := v2.Group("/task")

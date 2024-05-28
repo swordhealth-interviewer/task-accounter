@@ -16,7 +16,7 @@ func TaskCreateRequestToTaskCreateInput(t dto.TaskCreateRequest, user entities.U
 
 func TaskCreateOutputToTaskCreateResponse(t usecases.TaskCreateOutput) dto.TaskCreateResponse {
 	return dto.TaskCreateResponse{
-		ID: t.Task.ID,
+		ID: t.TaskID,
 	}
 }
 

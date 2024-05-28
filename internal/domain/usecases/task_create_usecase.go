@@ -15,7 +15,7 @@ type TaskCreateInput struct {
 }
 
 type TaskCreateOutput struct {
-	Task *entities.Task
+	TaskID string
 }
 
 type TaskCreateUseCaseInterface interface {
@@ -45,13 +45,13 @@ func (u TaskCreateUseCase) Execute(input TaskCreateInput) (TaskCreateOutput, err
 	uuid := uuid.NewString()
 	task.ID = uuid
 
-	createdTask, err := u.TaskRepository.Save(task)
+	taskID, err := u.TaskRepository.Create(task)
 	if err != nil {
 		return TaskCreateOutput{}, errors.New(string(ErrorSaveTask) + ": " + err.Error())
 	}
 
 	output := TaskCreateOutput{
-		Task: createdTask,
+		TaskID: taskID,
 	}
 
 	return output, nil

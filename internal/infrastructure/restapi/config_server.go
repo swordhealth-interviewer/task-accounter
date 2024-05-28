@@ -1,13 +1,51 @@
 package restapi
 
 import (
+	"fmt"
+	"log"
+	"os"
+
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
+	echojwt "github.com/labstack/echo-jwt/v4"
+	"github.com/labstack/echo/v4"
 	"github.com/uiansol/task-accounter.git/internal/domain/usecases"
 	dbmysql "github.com/uiansol/task-accounter.git/internal/infrastructure/db/mysql"
+	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/auth"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/handlers"
+	gormmysql "gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
+func LoadEnvs() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
+func configJwt() echojwt.Config {
+	return echojwt.Config{
+		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+			return new(auth.JwtCustomClaims)
+		},
+		SigningKey: []byte(os.Getenv("JWT_SECRET")),
+	}
+}
+
+func ConnectToMysql() *gorm.DB {
+	var err error
+	dsn := fmt.Sprintf("root:%s@tcp(%s:3306)/%s?parseTime=true", os.Getenv("MYSQL_ROOT_PASSWORD"), os.Getenv("MYSQL_ROOT_HOST"), os.Getenv("MYSQL_DATABASE"))
+	db, err := gorm.Open(gormmysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Error connecting with database")
+	}
+
+	return db
+}
+
 func configHandlers(usecases *AppUseCases) *AppHandlers {
-	loginHandler := handlers.NewLoginHandler()
+	loginHandler := handlers.NewLoginHandler(usecases.loginUseCase)
 	pingHandler := handlers.NewPingHandler()
 	taskCreateHandler := handlers.NewTaskCreateHandler(usecases.taskCreateUseCase)
 	taskReadHandler := handlers.NewTaskReadHandler(usecases.taskReadUseCase)
@@ -27,6 +65,7 @@ func configHandlers(usecases *AppUseCases) *AppHandlers {
 }
 
 func configUseCases(repositories *AppRepositories) *AppUseCases {
+	loginUseCase := usecases.NewLoginUseCase(repositories.userRepository)
 	taskCreateUseCase := usecases.NewTaskCreateUseCase(repositories.taskRepository)
 	taskReadUsecase := usecases.NewTaskReadUseCase(repositories.taskRepository)
 	taskReadAllUsecase := usecases.NewTaskReadAllUseCase(repositories.taskRepository)
@@ -34,6 +73,7 @@ func configUseCases(repositories *AppRepositories) *AppUseCases {
 	taskDeleteUsecase := usecases.NewTaskDeleteUseCase(repositories.taskRepository)
 
 	return &AppUseCases{
+		loginUseCase:       loginUseCase,
 		taskCreateUseCase:  taskCreateUseCase,
 		taskReadUseCase:    taskReadUsecase,
 		taskReadAllUseCase: taskReadAllUsecase,
@@ -42,10 +82,12 @@ func configUseCases(repositories *AppRepositories) *AppUseCases {
 	}
 }
 
-func configRepositories() *AppRepositories {
-	taskRepository := dbmysql.NewTaskRepository()
+func configRepositories(db *gorm.DB) *AppRepositories {
+	userRepository := dbmysql.NewUserRepository(db)
+	taskRepository := dbmysql.NewTaskRepository(db)
 
 	return &AppRepositories{
+		userRepository: userRepository,
 		taskRepository: taskRepository,
 	}
 }

@@ -34,23 +34,13 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 			},
 		}
 
-		taskRepositoryMock.On("Save", mock.Anything).Return(&entities.Task{
-			ID:      "task-id",
-			Title:   "Task Title",
-			Summary: "Task Description",
-			OwnerID: "user-id",
-			Status:  entities.Open,
-		}, nil)
+		taskRepositoryMock.On("Create", mock.Anything).Return("task-id", nil)
 
 		output, err := taskCreateUsecase.Execute(task)
 
 		assert.Nil(t, err)
 		assert.NotNil(t, output)
-		assert.Equal(t, "task-id", output.Task.ID)
-		assert.Equal(t, task.Title, output.Task.Title)
-		assert.Equal(t, task.Summary, output.Task.Summary)
-		assert.Equal(t, task.User.ID, output.Task.OwnerID)
-		assert.Equal(t, entities.Open, output.Task.Status)
+		assert.Equal(t, "task-id", output.TaskID)
 	})
 
 	t.Run("should return an error when user is not a technician", func(t *testing.T) {
@@ -74,7 +64,7 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
 		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
 
-		taskRepositoryMock.On("Save", mock.Anything).Return(&entities.Task{}, assert.AnError)
+		taskRepositoryMock.On("Create", mock.Anything).Return("", assert.AnError)
 
 		input := usecases.TaskCreateInput{
 			Title:   "Task Title",

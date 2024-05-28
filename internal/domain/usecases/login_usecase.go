@@ -5,6 +5,7 @@ import (
 
 	"github.com/uiansol/task-accounter.git/internal/domain/adapters"
 	"github.com/uiansol/task-accounter.git/internal/domain/entities"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type LoginInput struct {
@@ -36,7 +37,7 @@ func (uc *LoginUseCase) Execute(input LoginInput) (LoginOutput, error) {
 		return LoginOutput{}, errors.New(string(ErrUserNotFound))
 	}
 
-	if password != input.Password {
+	if err := bcrypt.CompareHashAndPassword([]byte(password), []byte(input.Password)); err != nil {
 		return LoginOutput{}, errors.New(string(ErrInvalidCredentials))
 	}
 

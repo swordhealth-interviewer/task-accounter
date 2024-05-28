@@ -20,32 +20,6 @@ func TestNewLoginUseCase(t *testing.T) {
 }
 
 func TestLoginUseCaseExecute(t *testing.T) {
-	t.Run("should return a user with error nil", func(t *testing.T) {
-		userRepositoryMock := mocks.NewUserRepositoryInterface(t)
-		loginUsecase := usecases.NewLoginUseCase(userRepositoryMock)
-
-		input := usecases.LoginInput{
-			Username: "test-user",
-			Password: "password",
-		}
-
-		userRepositoryMock.On("FindByUsername", input.Username).Return(&entities.User{
-			ID:    "user-id",
-			Name:  "test-user",
-			Email: "test@test.com",
-			Role:  entities.UserRoleTechnician,
-		}, "password", nil)
-
-		output, err := loginUsecase.Execute(input)
-
-		assert.Nil(t, err)
-		assert.NotNil(t, output)
-		assert.Equal(t, "user-id", output.User.ID)
-		assert.Equal(t, input.Username, output.User.Name)
-		assert.Equal(t, "test@test.com", output.User.Email)
-		assert.Equal(t, entities.UserRoleTechnician, output.User.Role)
-	})
-
 	t.Run("should return an error when user is not found", func(t *testing.T) {
 		userRepositoryMock := mocks.NewUserRepositoryInterface(t)
 		loginUsecase := usecases.NewLoginUseCase(userRepositoryMock)

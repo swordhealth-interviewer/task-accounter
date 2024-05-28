@@ -11,18 +11,21 @@ func main() {
 	restapi.LoadEnvs()
 	db := restapi.ConnectToMysql()
 
-	username := "manager-2"
-	password := "manager-2"
-	role := "manager"
+	users := []string{"tech-1", "tech-2", "manager-1"}
+	passwords := []string{"tech-1", "tech-2", "manager-1"}
+	roles := []string{"techinician", "technician", "manager"}
 
-	passwordHash, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	for i := 0; i < 3; i++ {
+		passwordHash, _ := bcrypt.GenerateFromPassword([]byte(passwords[i]), bcrypt.DefaultCost)
 
-	user := dbmysql.User{
-		ID:       uuid.New(),
-		Username: username,
-		Password: string(passwordHash),
-		Role:     role,
+		user := dbmysql.User{
+			ID:       uuid.New(),
+			Username: users[i],
+			Email:    users[i] + "@task-accounter.com",
+			Role:     roles[i],
+			Password: string(passwordHash),
+		}
+
+		db.Create(&user)
 	}
-
-	db.Create(&user)
 }

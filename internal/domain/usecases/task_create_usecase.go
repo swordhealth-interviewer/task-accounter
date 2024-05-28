@@ -2,10 +2,12 @@ package usecases
 
 import (
 	"errors"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/uiansol/task-accounter.git/internal/domain/adapters"
 	"github.com/uiansol/task-accounter.git/internal/domain/entities"
+	"github.com/uiansol/task-accounter.git/internal/infrastructure/encrypt"
 )
 
 type TaskCreateInput struct {
@@ -41,6 +43,12 @@ func (u TaskCreateUseCase) Execute(input TaskCreateInput) (TaskCreateOutput, err
 	if err != nil {
 		return TaskCreateOutput{}, errors.New(string(ErrorCreateTask) + ": " + err.Error())
 	}
+
+	encText, err := encrypt.Encrypt(task.Summary, os.Getenv("SUMMARY_SECRET"))
+	if err != nil {
+		return TaskCreateOutput{}, errors.New(string(ErrorCryptSummary) + ": " + err.Error())
+	}
+	task.Summary = encText
 
 	uuid := uuid.NewString()
 	task.ID = uuid

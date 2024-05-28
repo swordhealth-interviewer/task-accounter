@@ -16,4 +16,5 @@ const (
 	ErrorFindTaskByID           UseCaseError = "error finding task on database"
 	ErrorFindAllTasks           UseCaseError = "error reading all tasks from database"
 	ErrorFindTasksByUser        UseCaseError = "error reading tasks by user from database"
+	ErrorCryptSummary           UseCaseError = "error encrypting or decrypting task summary"
 )

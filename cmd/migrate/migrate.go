@@ -8,5 +8,5 @@ import (
 func main() {
 	restapi.LoadEnvs()
 	db := restapi.ConnectToMysql()
-	db.AutoMigrate(&dbmysql.User{})
+	db.AutoMigrate(&dbmysql.User{}, &dbmysql.Task{})
 }

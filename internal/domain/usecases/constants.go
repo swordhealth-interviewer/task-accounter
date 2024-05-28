@@ -5,7 +5,7 @@ type UseCaseError string
 const (
 	ErrUserNotFound             UseCaseError = "user not found"
 	ErrInvalidCredentials       UseCaseError = "invalid credentials"
-	ErrorTechnicianRoleRequired UseCaseError = "only technicians can create tasks"
+	ErrorTechnicianRoleRequired UseCaseError = "only technicians can create or update tasks"
 	ErrorManagerRoleRequired    UseCaseError = "only managers can delete tasks"
 	ErrorTaskNotOwnedByUser     UseCaseError = "task is not owned by the user"
 	ErrorTaskClosed             UseCaseError = "closed tasks can not be updated"

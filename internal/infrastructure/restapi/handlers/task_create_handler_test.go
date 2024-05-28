@@ -11,7 +11,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/uiansol/task-accounter.git/internal/domain/entities"
 	"github.com/uiansol/task-accounter.git/internal/domain/mocks"
 	"github.com/uiansol/task-accounter.git/internal/domain/usecases"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/auth"
@@ -53,9 +52,7 @@ func TestTaskCreateHandle(t *testing.T) {
 
 		useCaseMock := mocks.NewTaskCreateUseCaseInterface(t)
 		useCaseMock.On("Execute", mock.Anything).Return(usecases.TaskCreateOutput{
-			Task: &entities.Task{
-				ID: "123",
-			},
+			TaskID: "123",
 		}, nil)
 
 		h := NewTaskCreateHandler(useCaseMock)

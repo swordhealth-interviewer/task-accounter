@@ -13,7 +13,7 @@ func main() {
 
 	users := []string{"tech-1", "tech-2", "manager-1"}
 	passwords := []string{"tech-1", "tech-2", "manager-1"}
-	roles := []string{"techinician", "technician", "manager"}
+	roles := []string{"technician", "technician", "manager"}
 
 	for i := 0; i < 3; i++ {
 		passwordHash, _ := bcrypt.GenerateFromPassword([]byte(passwords[i]), bcrypt.DefaultCost)

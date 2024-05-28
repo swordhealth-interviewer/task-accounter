@@ -9,6 +9,7 @@ require (
 	github.com/labstack/echo-jwt/v4 v4.2.0
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/stretchr/testify v1.9.0
+	golang.org/x/crypto v0.23.0
 	gorm.io/driver/mysql v1.5.6
 	gorm.io/gorm v1.25.10
 )
@@ -26,7 +27,6 @@ require (
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	golang.org/x/crypto v0.23.0 // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect

@@ -24,15 +24,18 @@ type TaskCreateUseCaseInterface interface {
 
 type TaskCreateUseCase struct {
 	TaskRepository adapters.TaskRepositoryInterface
+	Encrypter      adapters.EncrypterInterface
 }
 
-func NewTaskCreateUseCase(taskRepository adapters.TaskRepositoryInterface) TaskCreateUseCase {
+func NewTaskCreateUseCase(taskRepository adapters.TaskRepositoryInterface, encrypter adapters.EncrypterInterface) TaskCreateUseCase {
 	return TaskCreateUseCase{
 		TaskRepository: taskRepository,
+		Encrypter:      encrypter,
 	}
 }
 
 func (u TaskCreateUseCase) Execute(input TaskCreateInput) (TaskCreateOutput, error) {
+
 	if input.User.Role != entities.UserRoleTechnician {
 		return TaskCreateOutput{}, errors.New(string(ErrorTechnicianRoleRequired))
 	}
@@ -41,6 +44,12 @@ func (u TaskCreateUseCase) Execute(input TaskCreateInput) (TaskCreateOutput, err
 	if err != nil {
 		return TaskCreateOutput{}, errors.New(string(ErrorCreateTask) + ": " + err.Error())
 	}
+
+	encText, err := u.Encrypter.Encrypt(task.Summary)
+	if err != nil {
+		return TaskCreateOutput{}, errors.New(string(ErrorCryptSummary) + ": " + err.Error())
+	}
+	task.Summary = encText
 
 	uuid := uuid.NewString()
 	task.ID = uuid

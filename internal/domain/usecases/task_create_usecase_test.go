@@ -13,17 +13,20 @@ import (
 func TestNewTaskCreateUseCase(t *testing.T) {
 	t.Run("should return a task create use case", func(t *testing.T) {
 		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
-		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
+		encrypterMock := mocks.NewEncrypterInterface(t)
+		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock, encrypterMock)
 
 		assert.NotNil(t, taskCreateUsecase)
 		assert.NotNil(t, taskCreateUsecase.TaskRepository)
+		assert.NotNil(t, taskCreateUsecase.Encrypter)
 	})
 }
 
 func TestTaskCreateUseCaseExecute(t *testing.T) {
 	t.Run("should create a task and return it with error nil", func(t *testing.T) {
 		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
-		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
+		encrypterMock := mocks.NewEncrypterInterface(t)
+		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock, encrypterMock)
 
 		task := usecases.TaskCreateInput{
 			Title:   "Task Title",
@@ -34,6 +37,7 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 			},
 		}
 
+		encrypterMock.On("Encrypt", mock.Anything).Return("encrypted-summary", nil)
 		taskRepositoryMock.On("Create", mock.Anything).Return("task-id", nil)
 
 		output, err := taskCreateUsecase.Execute(task)
@@ -45,7 +49,8 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 
 	t.Run("should return an error when user is not a technician", func(t *testing.T) {
 		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
-		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
+		encrypterMock := mocks.NewEncrypterInterface(t)
+		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock, encrypterMock)
 
 		task := usecases.TaskCreateInput{
 			User: entities.User{
@@ -62,8 +67,10 @@ func TestTaskCreateUseCaseExecute(t *testing.T) {
 
 	t.Run("should return an error when task repository fails to save", func(t *testing.T) {
 		taskRepositoryMock := mocks.NewTaskRepositoryInterface(t)
-		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock)
+		encrypterMock := mocks.NewEncrypterInterface(t)
+		taskCreateUsecase := usecases.NewTaskCreateUseCase(taskRepositoryMock, encrypterMock)
 
+		encrypterMock.On("Encrypt", mock.Anything).Return("encrypted-summary", nil)
 		taskRepositoryMock.On("Create", mock.Anything).Return("", assert.AnError)
 
 		input := usecases.TaskCreateInput{

@@ -2,12 +2,10 @@ package usecases
 
 import (
 	"errors"
-	"os"
 
 	"github.com/google/uuid"
 	"github.com/uiansol/task-accounter.git/internal/domain/adapters"
 	"github.com/uiansol/task-accounter.git/internal/domain/entities"
-	"github.com/uiansol/task-accounter.git/internal/infrastructure/encrypt"
 )
 
 type TaskCreateInput struct {
@@ -26,15 +24,18 @@ type TaskCreateUseCaseInterface interface {
 
 type TaskCreateUseCase struct {
 	TaskRepository adapters.TaskRepositoryInterface
+	Encrypter      adapters.EncrypterInterface
 }
 
-func NewTaskCreateUseCase(taskRepository adapters.TaskRepositoryInterface) TaskCreateUseCase {
+func NewTaskCreateUseCase(taskRepository adapters.TaskRepositoryInterface, encrypter adapters.EncrypterInterface) TaskCreateUseCase {
 	return TaskCreateUseCase{
 		TaskRepository: taskRepository,
+		Encrypter:      encrypter,
 	}
 }
 
 func (u TaskCreateUseCase) Execute(input TaskCreateInput) (TaskCreateOutput, error) {
+
 	if input.User.Role != entities.UserRoleTechnician {
 		return TaskCreateOutput{}, errors.New(string(ErrorTechnicianRoleRequired))
 	}
@@ -44,7 +45,7 @@ func (u TaskCreateUseCase) Execute(input TaskCreateInput) (TaskCreateOutput, err
 		return TaskCreateOutput{}, errors.New(string(ErrorCreateTask) + ": " + err.Error())
 	}
 
-	encText, err := encrypt.Encrypt(task.Summary, os.Getenv("SUMMARY_SECRET"))
+	encText, err := u.Encrypter.Encrypt(task.Summary)
 	if err != nil {
 		return TaskCreateOutput{}, errors.New(string(ErrorCryptSummary) + ": " + err.Error())
 	}

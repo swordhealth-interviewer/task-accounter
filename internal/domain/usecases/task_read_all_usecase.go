@@ -2,11 +2,9 @@ package usecases
 
 import (
 	"errors"
-	"os"
 
 	"github.com/uiansol/task-accounter.git/internal/domain/adapters"
 	"github.com/uiansol/task-accounter.git/internal/domain/entities"
-	"github.com/uiansol/task-accounter.git/internal/infrastructure/encrypt"
 )
 
 type TaskReadAllInput struct {
@@ -23,11 +21,13 @@ type TaskReadAllUseCaseInterface interface {
 
 type TaskReadAllUseCase struct {
 	TaskRepository adapters.TaskRepositoryInterface
+	Encrypter      adapters.EncrypterInterface
 }
 
-func NewTaskReadAllUseCase(taskRepository adapters.TaskRepositoryInterface) TaskReadAllUseCase {
+func NewTaskReadAllUseCase(taskRepository adapters.TaskRepositoryInterface, encrypter adapters.EncrypterInterface) TaskReadAllUseCase {
 	return TaskReadAllUseCase{
 		TaskRepository: taskRepository,
+		Encrypter:      encrypter,
 	}
 }
 
@@ -48,7 +48,7 @@ func (u TaskReadAllUseCase) Execute(input TaskReadAllInput) (TaskReadAllOutput, 
 	}
 
 	for _, task := range tasks {
-		decText, err := encrypt.Decrypt(task.Summary, os.Getenv("SUMMARY_SECRET"))
+		decText, err := u.Encrypter.Decrypt(task.Summary)
 		if err != nil {
 			return TaskReadAllOutput{}, errors.New(string(ErrorCryptSummary))
 		}

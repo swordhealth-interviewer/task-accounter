@@ -23,11 +23,13 @@ type TaskUpdateUseCaseInterface interface {
 
 type TaskUpdateUseCase struct {
 	TaskRepository adapters.TaskRepositoryInterface
+	Encrypter      adapters.EncrypterInterface
 }
 
-func NewTaskUpdateUseCase(taskRepository adapters.TaskRepositoryInterface) TaskUpdateUseCase {
+func NewTaskUpdateUseCase(taskRepository adapters.TaskRepositoryInterface, encrypter adapters.EncrypterInterface) TaskUpdateUseCase {
 	return TaskUpdateUseCase{
 		TaskRepository: taskRepository,
+		Encrypter:      encrypter,
 	}
 }
 
@@ -55,7 +57,12 @@ func (u TaskUpdateUseCase) Execute(input TaskUpdateInput) error {
 	}
 
 	task.Title = input.Title
-	task.Summary = input.Summary
+
+	encText, err := u.Encrypter.Encrypt(input.Summary)
+	if err != nil {
+		return errors.New(string(ErrorCryptSummary) + ": " + err.Error())
+	}
+	task.Summary = encText
 
 	if input.CloseTask {
 		task.Status = entities.Closed

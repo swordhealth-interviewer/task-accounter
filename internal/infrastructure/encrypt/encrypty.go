@@ -6,6 +6,16 @@ import (
 	"encoding/base64"
 )
 
+type EncrypterService struct {
+	MySecret string
+}
+
+func NewEncrypterService(mysecret string) *EncrypterService {
+	return &EncrypterService{
+		MySecret: mysecret,
+	}
+}
+
 var bytes = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
 
 func Encode(b []byte) string {
@@ -20,8 +30,8 @@ func Decode(s string) []byte {
 	return data
 }
 
-func Encrypt(text, MySecret string) (string, error) {
-	block, err := aes.NewCipher([]byte(MySecret))
+func (es EncrypterService) Encrypt(text string) (string, error) {
+	block, err := aes.NewCipher([]byte(es.MySecret))
 	if err != nil {
 		return "", err
 	}
@@ -32,8 +42,8 @@ func Encrypt(text, MySecret string) (string, error) {
 	return Encode(cipherText), nil
 }
 
-func Decrypt(text, MySecret string) (string, error) {
-	block, err := aes.NewCipher([]byte(MySecret))
+func (es EncrypterService) Decrypt(text string) (string, error) {
+	block, err := aes.NewCipher([]byte(es.MySecret))
 	if err != nil {
 		return "", err
 	}

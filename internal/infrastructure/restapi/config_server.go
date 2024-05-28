@@ -9,8 +9,10 @@ import (
 	"github.com/joho/godotenv"
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
+	"github.com/uiansol/task-accounter.git/internal/domain/adapters"
 	"github.com/uiansol/task-accounter.git/internal/domain/usecases"
 	dbmysql "github.com/uiansol/task-accounter.git/internal/infrastructure/db/mysql"
+	"github.com/uiansol/task-accounter.git/internal/infrastructure/encrypt"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/auth"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/handlers"
 	gormmysql "gorm.io/driver/mysql"
@@ -24,6 +26,10 @@ func LoadEnvs() {
 	}
 }
 
+func configEncrypter() adapters.EncrypterInterface {
+	return encrypt.NewEncrypterService(os.Getenv("SUMMARY_SECRET"))
+}
+
 func configJwt() echojwt.Config {
 	return echojwt.Config{
 		NewClaimsFunc: func(c echo.Context) jwt.Claims {
@@ -33,9 +39,16 @@ func configJwt() echojwt.Config {
 	}
 }
 
-func ConnectToMysql() *gorm.DB {
+func ConnectToMysql(debug bool) *gorm.DB {
 	var err error
-	dsn := fmt.Sprintf("root:%s@tcp(%s:3306)/%s?parseTime=true", os.Getenv("MYSQL_ROOT_PASSWORD"), os.Getenv("MYSQL_ROOT_HOST"), os.Getenv("MYSQL_DATABASE"))
+	var dsn string
+
+	if debug {
+		dsn = fmt.Sprintf("root:%s@tcp(%s:3306)/%s?parseTime=true", os.Getenv("MYSQL_ROOT_PASSWORD"), "127.0.0.1", os.Getenv("MYSQL_DATABASE"))
+	} else {
+		dsn = fmt.Sprintf("root:%s@tcp(%s:3306)/%s?parseTime=true", os.Getenv("MYSQL_ROOT_PASSWORD"), os.Getenv("MYSQL_ROOT_HOST"), os.Getenv("MYSQL_DATABASE"))
+	}
+
 	db, err := gorm.Open(gormmysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Error connecting with database")
@@ -64,12 +77,12 @@ func configHandlers(usecases *AppUseCases) *AppHandlers {
 	}
 }
 
-func configUseCases(repositories *AppRepositories) *AppUseCases {
+func configUseCases(repositories *AppRepositories, encrypter adapters.EncrypterInterface) *AppUseCases {
 	loginUseCase := usecases.NewLoginUseCase(repositories.userRepository)
-	taskCreateUseCase := usecases.NewTaskCreateUseCase(repositories.taskRepository)
-	taskReadUsecase := usecases.NewTaskReadUseCase(repositories.taskRepository)
-	taskReadAllUsecase := usecases.NewTaskReadAllUseCase(repositories.taskRepository)
-	taskUpdateUsecase := usecases.NewTaskUpdateUseCase(repositories.taskRepository)
+	taskCreateUseCase := usecases.NewTaskCreateUseCase(repositories.taskRepository, encrypter)
+	taskReadUsecase := usecases.NewTaskReadUseCase(repositories.taskRepository, encrypter)
+	taskReadAllUsecase := usecases.NewTaskReadAllUseCase(repositories.taskRepository, encrypter)
+	taskUpdateUsecase := usecases.NewTaskUpdateUseCase(repositories.taskRepository, encrypter)
 	taskDeleteUsecase := usecases.NewTaskDeleteUseCase(repositories.taskRepository)
 
 	return &AppUseCases{

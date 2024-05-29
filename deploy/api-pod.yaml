@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.33.0 (3ce457399)
+  labels:
+    io.kompose.network/opt-net: "true"
+    io.kompose.service: api
+  name: api
+spec:
+  containers:
+    - env:
+        - name: JWT_SECRET
+        - name: MYSQL_DATABASE
+        - name: MYSQL_ROOT_HOST
+        - name: MYSQL_ROOT_PASSWORD
+        - name: SUMMARY_SECRET
+      image: api
+      name: api
+      ports:
+        - containerPort: 8080
+          hostPort: 8080
+          protocol: TCP
+  restartPolicy: OnFailure

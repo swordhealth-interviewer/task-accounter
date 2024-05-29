@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/uiansol/task-accounter.git/internal/domain/adapters"
@@ -24,12 +23,14 @@ type TaskUpdateUseCaseInterface interface {
 type TaskUpdateUseCase struct {
 	TaskRepository adapters.TaskRepositoryInterface
 	Encrypter      adapters.EncrypterInterface
+	Publisher      adapters.MessagePublisherInterface
 }
 
-func NewTaskUpdateUseCase(taskRepository adapters.TaskRepositoryInterface, encrypter adapters.EncrypterInterface) TaskUpdateUseCase {
+func NewTaskUpdateUseCase(taskRepository adapters.TaskRepositoryInterface, encrypter adapters.EncrypterInterface, publisher adapters.MessagePublisherInterface) TaskUpdateUseCase {
 	return TaskUpdateUseCase{
 		TaskRepository: taskRepository,
 		Encrypter:      encrypter,
+		Publisher:      publisher,
 	}
 }
 
@@ -75,10 +76,13 @@ func (u TaskUpdateUseCase) Execute(input TaskUpdateInput) error {
 	}
 
 	if input.CloseTask {
-		userPrint := input.User.Name + "<" + input.User.Email + ">"
-		taskPrint := task.Title + "<" + task.ID + ">"
-		// TODO: send to message broker
-		fmt.Println("The tech " + userPrint + " performed the task" + taskPrint + " on date " + task.DoneAt.String())
+		go func() {
+			userPrint := input.User.Name + "<" + input.User.Email + ">"
+			taskPrint := task.Title + "<" + task.ID + ">"
+			msg := "The tech " + userPrint + " performed the task" + taskPrint + " on date " + task.DoneAt.String()
+			u.Publisher.PublishMessages(msg, "task-done-queue")
+		}()
+
 	}
 
 	return nil

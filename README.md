@@ -9,7 +9,7 @@ Golang API to track and account tasks performed
 * Testify - Mockery - GORM
 * Redis
 * Mysql
-* Docker
+* Docker and Kubernetes
 
 ## How to run
 
@@ -36,6 +36,12 @@ docker compose up
 Depending on your configurations, you may need **docker-compose** instead.
 
 Wait until the server is completely running. The first time, it can be slow because of the setup on MySQL.
+
+4. If you want to deploy on a **Kubernetes** infrastructure, use this command for files in the deploy folder.
+
+```console
+kubectl apply -f <filename>
+```
 
 ## How to test
 

@@ -1,0 +1,460 @@
+{
+	"info": {
+		"_postman_id": "3de57ebb-2b89-4b2d-8560-354760341e12",
+		"name": "task-accounter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18493119"
+	},
+	"item": [
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNiZDFiNWVjLWQ1YzQtNGZiNC1iMTVkLTgwNGM4ODI5YjI4ZiIsIm5hbWUiOiJ0ZWNoLTEiLCJlbWFpbCI6InRlY2gtMUB0YXNrLWFjY291bnRlci5jb20iLCJyb2xlIjoidGVjaG5pY2lhbiIsImV4cCI6MTcxNzE3Nzg0M30.GXDOxBXD74J9Ge6bZiiEPVCjBZf2rqMVU5NBhAahReg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"title-1\",\n    \"summary\": \"summary-1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/task/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"task",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read one task from Tech 1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNiZDFiNWVjLWQ1YzQtNGZiNC1iMTVkLTgwNGM4ODI5YjI4ZiIsIm5hbWUiOiJ0ZWNoLTEiLCJlbWFpbCI6InRlY2gtMUB0YXNrLWFjY291bnRlci5jb20iLCJyb2xlIjoidGVjaG5pY2lhbiIsImV4cCI6MTcxNzE3Nzg0M30.GXDOxBXD74J9Ge6bZiiEPVCjBZf2rqMVU5NBhAahReg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/task/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"task",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "25e2e660-64b5-40b2-a2f9-147e643d4f8a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read one task from Tech 2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNiZDFiNWVjLWQ1YzQtNGZiNC1iMTVkLTgwNGM4ODI5YjI4ZiIsIm5hbWUiOiJ0ZWNoLTEiLCJlbWFpbCI6InRlY2gtMUB0YXNrLWFjY291bnRlci5jb20iLCJyb2xlIjoidGVjaG5pY2lhbiIsImV4cCI6MTcxNzEyMzA3Mn0.38SQVLkrAOb7Zr-TaE0lGWPvU19pVAE9v42o2t50_So",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/task/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"task",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "d73f09fd-dbc2-4d0d-b88a-86a82dc6244d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReadAll",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNiZDFiNWVjLWQ1YzQtNGZiNC1iMTVkLTgwNGM4ODI5YjI4ZiIsIm5hbWUiOiJ0ZWNoLTEiLCJlbWFpbCI6InRlY2gtMUB0YXNrLWFjY291bnRlci5jb20iLCJyb2xlIjoidGVjaG5pY2lhbiIsImV4cCI6MTcxNzE3NzQ4OX0.DXiRntBVRoHkJUJwtkHgTZaDEmSfZmgSoEVrhR7_yHI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/task/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"task",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNiZDFiNWVjLWQ1YzQtNGZiNC1iMTVkLTgwNGM4ODI5YjI4ZiIsIm5hbWUiOiJ0ZWNoLTEiLCJlbWFpbCI6InRlY2gtMUB0YXNrLWFjY291bnRlci5jb20iLCJyb2xlIjoidGVjaG5pY2lhbiIsImV4cCI6MTcxNzE3Nzg0M30.GXDOxBXD74J9Ge6bZiiEPVCjBZf2rqMVU5NBhAahReg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"title-updated-1\",\n    \"summary\": \"summary-updated-1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/task/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"task",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "25e2e660-64b5-40b2-a2f9-147e643d4f8a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdhOWJjODUxLTM4YmUtNGYwYS1iNjliLWJiMWVhNjNlYWQzNyIsIm5hbWUiOiJtYW5hZ2VyLTEiLCJlbWFpbCI6Im1hbmFnZXItMUB0YXNrLWFjY291bnRlci5jb20iLCJyb2xlIjoibWFuYWdlciIsImV4cCI6MTcxNzEyNjMxNn0.WzKSn4RoZljk5qmzRTReCSJOZ-8bXesgTVvVt728qik",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v2/task/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v2",
+								"task",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5d419fc7-b6ea-43ef-844e-025e421f6805"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login Tech 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"tech-1\",\n    \"password\": \"tech-1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Tech 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"tech-2\",\n    \"password\": \"tech-2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Manager 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"manager-1\",\n    \"password\": \"manager-1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNiZDFiNWVjLWQ1YzQtNGZiNC1iMTVkLTgwNGM4ODI5YjI4ZiIsIm5hbWUiOiJ0ZWNoLTEiLCJlbWFpbCI6InRlY2gtMUB0YXNrLWFjY291bnRlci5jb20iLCJyb2xlIjoidGVjaG5pY2lhbiIsImV4cCI6MTcxNzEyMjAyMH0.D1LAGPg7eY46ULiBjwhR5gXLw4nD4sv3coQKMsdtzaA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/v2/ping",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"v2",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

@@ -19,7 +19,12 @@ services:
       MYSQL_ROOT_HOST: ${MYSQL_ROOT_HOST} 
     networks:
       - "net"
-
+  redis:
+    container_name: "redis"
+    image: redis:alpine
+    command: redis-server
+    ports:
+      - "6379:6379"
   db:
     platform: "linux/x86_64"
     image: "mysql:8.4"

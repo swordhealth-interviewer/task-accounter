@@ -54,14 +54,16 @@ func StartServer(debug bool) {
 
 	jwtConfig := configJwt()
 	db := ConnectToMysql(debug)
+	redisClient := ConnectToRedis()
 
 	router := echo.New()
 	router.Use(middleware.Logger())
 	router.Use(middleware.Recover())
 
+	publisher := configPublisher(redisClient)
 	encrypter := configEncrypter()
 	repositories := configRepositories(db)
-	usecases := configUseCases(repositories, encrypter)
+	usecases := configUseCases(repositories, encrypter, publisher)
 	handlers := configHandlers(usecases)
 
 	server := NewRestService(router, handlers)

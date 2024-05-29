@@ -7,6 +7,7 @@ Golang API to track and account tasks performed
 * Postman
 * Golang - Echo web Framework
 * Testify - Mockery - GORM
+* Redis
 * Mysql
 * Docker
 
@@ -61,7 +62,7 @@ role | technician    | technician   | manager   |
 * Unit tests with **mocks** to isolate execution.
 * Standard folder structure on Golang ecosystem as described at [Standard Go Project Layout](https://github.com/golang-standards/project-layout).
 * Encryption is ultimately handed at code, not a database. To isolate the business rules from external technologies that somebody can easily change with this architecture.
-
+* I used Redis as a message broker, although only the publisher, not the receiver, is implemented.
 
 ### Git
 ![github actions](https://docs.github.com/assets/cb-25535/images/help/actions/overview-actions-simple.png)

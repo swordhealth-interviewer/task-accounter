@@ -13,6 +13,7 @@ import (
 	"github.com/uiansol/task-accounter.git/internal/domain/usecases"
 	dbmysql "github.com/uiansol/task-accounter.git/internal/infrastructure/db/mysql"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/encrypt"
+	"github.com/uiansol/task-accounter.git/internal/infrastructure/redis"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/auth"
 	"github.com/uiansol/task-accounter.git/internal/infrastructure/restapi/handlers"
 	gormmysql "gorm.io/driver/mysql"
@@ -28,6 +29,10 @@ func LoadEnvs() {
 
 func configEncrypter() adapters.EncrypterInterface {
 	return encrypt.NewEncrypterService(os.Getenv("SUMMARY_SECRET"))
+}
+
+func configPublisher(redisClient redis.Redis) adapters.MessagePublisherInterface {
+	return redis.NewMessagePublisher(redisClient)
 }
 
 func configJwt() echojwt.Config {
@@ -57,6 +62,10 @@ func ConnectToMysql(debug bool) *gorm.DB {
 	return db
 }
 
+func ConnectToRedis() redis.Redis {
+	return redis.NewRedis()
+}
+
 func configHandlers(usecases *AppUseCases) *AppHandlers {
 	loginHandler := handlers.NewLoginHandler(usecases.loginUseCase)
 	pingHandler := handlers.NewPingHandler()
@@ -77,12 +86,12 @@ func configHandlers(usecases *AppUseCases) *AppHandlers {
 	}
 }
 
-func configUseCases(repositories *AppRepositories, encrypter adapters.EncrypterInterface) *AppUseCases {
+func configUseCases(repositories *AppRepositories, encrypter adapters.EncrypterInterface, publisher adapters.MessagePublisherInterface) *AppUseCases {
 	loginUseCase := usecases.NewLoginUseCase(repositories.userRepository)
 	taskCreateUseCase := usecases.NewTaskCreateUseCase(repositories.taskRepository, encrypter)
 	taskReadUsecase := usecases.NewTaskReadUseCase(repositories.taskRepository, encrypter)
 	taskReadAllUsecase := usecases.NewTaskReadAllUseCase(repositories.taskRepository, encrypter)
-	taskUpdateUsecase := usecases.NewTaskUpdateUseCase(repositories.taskRepository, encrypter)
+	taskUpdateUsecase := usecases.NewTaskUpdateUseCase(repositories.taskRepository, encrypter, publisher)
 	taskDeleteUsecase := usecases.NewTaskDeleteUseCase(repositories.taskRepository)
 
 	return &AppUseCases{
